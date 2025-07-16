@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title> Paper to Digital leave</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    * { 
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+    
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+    
+    .sidebar {
+      width: 280px;
+      background: linear-gradient(to bottom, #4b6cb7, #182848);
+      color: white;
+      padding: 30px 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 2;
+    }
+    
+    .sidebar h2 {
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+      padding-bottom: 15px;
+      margin-bottom: 25px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      font-size: 1.4rem;
+    }
+    
+    .sidebar button {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 14px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .sidebar button:hover {
+      background-color: rgba(255,255,255,0.2);
+      transform: translateX(5px);
+    }
+    
+    .sidebar button i {
+      font-size: 18px;
+      width: 25px;
+    }
+    
+    .main-content {
+      flex: 1;
+      padding: 40px;
+      background: white;
+      overflow-y: auto;
+      border-top-left-radius: 30px;
+      border-bottom-left-radius: 30px;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.05);
+      position: relative;
+      z-index: 1;
+      margin-left: -20px;
+    }
+    
+    .main-content h2 {
+      font-size: 28px;
+      margin-bottom: 25px;
+      color: #182848;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .main-content h2:after {
+      content: '';
+      position: absolute;
+      width: 60%;
+      height: 3px;
+      background: linear-gradient(to right, #4b6cb7, #182848);
+      bottom: -8px;
+      left: 0;
+      border-radius: 10px;
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 14px;
+      margin: 15px 0;
+      font-size: 15px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      transition: all 0.3s;
+      font-family: 'Poppins', sans-serif;
+    }
+   input:focus,select:focus, textarea:focus {
+      border-color: #4b6cb7;
+      box-shadow: 0 2px 8px rgba(75, 108, 183, 0.2);
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      margin: 15px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .submit-btn {
+      background: linear-gradient(to right, #4b6cb7, #182848);
+      color: white;
+      border: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 15px rgba(75, 108, 183, 0.3);
+    }
+    
+    .submit-btn:hover {
+      background: linear-gradient(to right, #3a5ca1, #0c1c3d);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(75, 108, 183, 0.4);
+    }
+    
+    .action-btn {
+      padding: 8px 16px;
+      margin: 5px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .approve-btn {
+      background: linear-gradient(to right, #56ab2f, #889578);
+      color: white;
+      border: none;
+    }
+    
+    .reject-btn {
+      background: linear-gradient(to right, #cb2d3e, #ef473a);
+      color: white;
+      border: none;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    
+    th, td {
+      padding: 16px;
+      text-align: left;
+    }
+    
+    th {
+      background: linear-gradient(to right, #4b6cb7, #182848);
+      color: white;
+      font-weight: 500;
+      text-transform: uppercase;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+    
+    tr:hover {
+      background-color: #f1f4f9;
+    }
+    
+    img { 
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      max-width: 1000px;
+      transition: transform 0.3s;
+    }
+    
+    img:hover {
+      transform: scale(1.1);
+    }
+    
+    .hidden { 
+      display: none;
+    }
+    
+    #loginPage {
+      max-width: 450px;
+      margin: 60px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    #loginPage img {
+      width: 100%;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    #loginPage h2 {
+      margin-bottom: 30px;
+      color: #182848;
+      font-size: 28px;
+      font-weight: 600;
+      position: relative;
+      display: inline-block;
+    }
+    
+    #loginPage h2:after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 3px;
+      background: linear-gradient(to right, #4b6cb7, #182848);
+      bottom: -10px;
+      left: 25%;
+      border-radius: 10px;
+    }
+    
+    video {
+      width: 100%;
+      margin-top: 15px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    #notifications {
+      background: linear-gradient(to right, #fffde1, #ffeaa5);
+      border: none;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 5px 15px rgba(255, 222, 100, 0.2);
+    }
+    
+    .notification-item {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+      border-left: 4px solid #4b6cb7;
+      animation: slideIn 0.5s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    label {
+      font-weight: 500;
+      color: #4b6cb7;
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .status-pending {
+      background-color: #fff3cd;
+      color: #856404;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .status-approved {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .status-rejected {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Page -->
+<div id="loginPage">
+  <img src="https://images.shiksha.com/mediadata/images/1494843473phpy8cUGH.jpeg" alt="Login Image"/>
+  <h2> Paper to Digital leave</h2>
+  <div class="form-group">
+    <input type="text" id="username" placeholder="Username" autocomplete="off"/>
+  </div>
+  <div class="form-group">
+    <input type="password" id="password" placeholder="Password"/>
+  </div>
+  <div class="form-group">
+    <select id="role">
+    
+      <option value="student">Student</option>
+      <option value="faculty">Faculty</option>
+    </select>
+  </div>
+  <button class="submit-btn" onclick="login()">
+    <i class="fas fa-sign-in-alt"></i> Login
+  </button>
+  <p id="loginError" style="color:#e74c3c; margin-top:15px; font-size:14px;"></p>
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard" class="container hidden">
+  <div class="sidebar">
+    <h2>Welcome, <span id="profileName"></span></h2>
+    <div id="studentMenu">
+      <button onclick="showSection('apply')">
+        <i class="fas fa-paper-plane"></i> Apply Leave
+      </button>
+      <button onclick="showSection('history')">
+        <i class="fas fa-history"></i> Leave History
+      </button>
+      <button onclick="showSection('notifications')">
+        <i class="fas fa-bell"></i> Notifications
+      </button>
+    </div>
+    <div id="facultyMenu" class="hidden">
+      <button onclick="showSection('requests')">
+        <i class="fas fa-inbox"></i> Leave Requests
+      </button>
+      <button onclick="showSection('faculty-history')">
+        <i class="fas fa-database"></i> All Applications
+      </button>
+    </div>
+    <button onclick="logout()" style="margin-top: auto;">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+
+  <div class="main-content">
+    <div id="section-notifications" class="hidden">
+      <h2><i class="fas fa-bell"></i> Notifications</h2>
+      <div id="notifications">No new notifications.</div>
+    </div>
+
+    <div id="section-apply" class="hidden">
+      <h2><i class="fas fa-paper-plane"></i> Apply for Leave</h2>
+      
+      <div class="form-group">
+        <label>Leave Type</label>
+        <select id="leaveType">
+          <option value="">Select Leave Type</option>
+          <option>Sick Leave</option>
+          <option>Casual Leave</option>
+          <option>Emergency Leave</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" id="startDate"/>
+      </div>
+      
+      <div class="form-group">
+        <label>End Date</label>
+        <input type="date" id="endDate"/>
+      </div>
+      
+      <div class="form-group">
+        <label>Reason for Leave</label>
+        <textarea id="reason" placeholder="Please explain your reason for leave..." rows="4"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label>Faculty Approval</label>
+        <select id="facultyList">
+          <option value="">Select Faculty</option>
+          <option>Prof. Vikash Sharma</option>
+          <option>Prof. Manoj Sharma</option>
+          <option>Prof. Sheetal Mishra</option>
+          <option>Prof. Rahul Gupta </option>
+          <option>Prof. Ramesh Ahuja</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Supporting Document</label>
+        <input type="file" id="fileInput" accept="image/*"/>
+      </div>
+      
+      <div class="form-group">
+        <label>Or Take Photo</label>
+        <video id="video" autoplay class="hidden"></video>
+        <button id="openCamera" onclick="startCamera()">
+          <i class="fas fa-camera"></i> Open Camera
+        </button>
+        <button id="capturePhoto" onclick="captureImage()" class="hidden">
+          <i class="fas fa-camera-retro"></i> Capture Photo
+        </button>
+        <canvas id="canvas" class="hidden"></canvas>
+      </div>
+      
+      <button class="submit-btn" onclick="submitLeave()">
+        <i class="fas fa-check-circle"></i> Submit Leave Application
+      </button>
+    </div>
+
+    <div id="section-history" class="hidden">
+      <h2><i class="fas fa-history"></i> Leave History</h2>
+      <table id="historyTable">
+        <tr>
+          <th>Type</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Document</th>
+        </tr>
+      </table>
+    </div>
+
+    <div id="section-requests" class="hidden">
+      <h2><i class="fas fa-inbox"></i> Pending Leave Requests</h2>
+      <table id="requestsTable">
+        <tr>
+          <th>Student</th>
+          <th>Type</th>
+          <th>Dates</th>
+          <th>Reason</th>
+          <th>Document</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </table>
+    </div>
+
+    <div id="section-faculty-history" class="hidden">
+      <h2><i class="fas fa-database"></i> All Leave Applications</h2>
+      <table id="facultyHistoryTable">
+        <tr>
+          <th>Student</th>
+          <th>Type</th>
+          <th>Dates</th>
+          <th>Reason</th>
+          <th>Status</th>
+          <th>Document</th>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+  let currentUser = null;
+  let leaves = [];
+  let capturedImage = null;
+  let videoStream = null;
+
+  function login() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const role = document.getElementById("role").value;
+
+    // Password validation (checking if password is at least 6 characters long)
+    if (!username || !password) {
+      document.getElementById("loginError").innerHTML = "<i class='fas fa-exclamation-circle'></i> Please fill all fields.";
+      return;
+    }
+
+    // Simulate checking password (in real applications, this should be checked on the server)
+    if (password !== "cdgi123") {
+      document.getElementById("loginError").innerHTML = "<i class='fas fa-exclamation-circle'></i> Invalid password.";
+      return;
+    }
+
+    // Simulate login success
+    currentUser = { username, role };
+    document.getElementById("profileName").innerText = username;
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+    document.getElementById("studentMenu").classList.toggle("hidden", role !== 'student');
+    document.getElementById("facultyMenu").classList.toggle("hidden", role !== 'faculty');
+    showSection(role === 'student' ? 'apply' : 'requests');
+    loadTables();
+  }
+
+  function logout() {
+    currentUser = null;
+    if (videoStream) videoStream.getTracks().forEach(track => track.stop());
+    document.getElementById("dashboard").classList.add("hidden");
+    document.getElementById("loginPage").classList.remove("hidden");
+    document.getElementById("username").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("loginError").innerText = "";
+  }
+
+  function showSection(section) {
+    document.querySelectorAll('.main-content > div').forEach(div => div.classList.add("hidden"));
+    document.getElementById(`section-${section}`).classList.remove("hidden");
+    if (section === 'notifications') loadNotifications();
+  }
+
+  function startCamera() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        videoStream = stream;
+        const video = document.getElementById("video");
+        video.srcObject = stream;
+        video.classList.remove("hidden");
+        document.getElementById("capturePhoto").classList.remove("hidden");
+        document.getElementById("openCamera").classList.add("hidden");
+      })
+      .catch(err => alert("Camera not accessible. Please check permissions."));
+  }
+
+  function captureImage() {
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext('2d');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0);
+    capturedImage = canvas.toDataURL('image/png');
+
+    alert("Photo captured successfully!");
+  }
+
+  function submitLeave() {
+    const type = document.getElementById("leaveType").value;
+    const start = document.getElementById("startDate").value;
+    const end = document.getElementById("endDate").value;
+    const reason = document.getElementById("reason").value;
+    const faculty = document.getElementById("facultyList").value;
+    const file = document.getElementById("fileInput").files[0];
+
+    if (!type || !start || !end || !reason || !faculty) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        saveLeave(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else if (capturedImage) {
+      saveLeave(capturedImage);
+    } else {
+      saveLeave(null);
+    }
+  }
+
+  function saveLeave(imageData) {
+    leaves.push({
+      student: currentUser.username,
+      type: document.getElementById("leaveType").value,
+      start: document.getElementById("startDate").value,
+      end: document.getElementById("endDate").value,
+      reason: document.getElementById("reason").value,
+      faculty: document.getElementById("facultyList").value,
+      status: "Pending",
+      imageData,
+      notified: false
+    });
+
+    alert("Leave application submitted successfully!");
+
+    document.querySelectorAll('#section-apply input, textarea, select').forEach(e => e.value = "");
+    document.getElementById("video").classList.add("hidden");
+    document.getElementById("capturePhoto").classList.add("hidden");
+    document.getElementById("openCamera").classList.remove("hidden");
+    capturedImage = null;
+
+    loadTables();
+  }
+
+  function formatDateRange(start, end) {
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    const options = { month: 'short', day: 'numeric' };
+    return `${startDate.toLocaleDateString('en-US', options)} - ${endDate.toLocaleDateString('en-US', options)}`;
+  }
+
+  function getStatusClass(status) {
+    if (status === "Pending") return "status-pending";
+    if (status === "Approved") return "status-approved";
+    if (status === "Rejected") return "status-rejected";
+    return "";
+  }
+
+  function loadTables() {
+    const hT = document.getElementById("historyTable");
+    const rT = document.getElementById("requestsTable");
+    const fT = document.getElementById("facultyHistoryTable");
+
+    hT.innerHTML = `<tr>
+      <th>Type</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>Reason</th>
+      <th>Status</th>
+      <th>Document</th>
+    </tr>`;
+
+    rT.innerHTML = `<tr>
+      <th>Student</th>
+      <th>Type</th>
+      <th>Dates</th>
+      <th>Reason</th>
+      <th>Document</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>`;
+
+    fT.innerHTML = `<tr>
+      <th>Student</th>
+      <th>Type</th>
+      <th>Dates</th>
+      <th>Reason</th>
+      <th>Status</th>
+      <th>Document</th>
+    </tr>`;
+
+    leaves.forEach((l, i) => {
+      const img = l.imageData
+        ? `<img src="${l.imageData}" width="80" onclick="window.open('${l.imageData}', '_blank')"/>`
+        : "—";
+
+      const statusSpan = `<span class="${getStatusClass(l.status)}">${l.status}</span>`;
+
+      if (currentUser.role === 'student' && l.student === currentUser.username) {
+        hT.innerHTML += `<tr>
+          <td>${l.type}</td>
+          <td>${l.start}</td>
+          <td>${l.end}</td>
+          <td>${l.reason}</td>
+          <td>${statusSpan}</td>
+          <td>${img}</td>
+        </tr>`;
+      }
+
+      if (currentUser.role === 'faculty' && l.faculty === currentUser.username) {
+        fT.innerHTML += `<tr>
+          <td>${l.student}</td>
+          <td>${l.type}</td>
+          <td>${formatDateRange(l.start, l.end)}</td>
+          <td>${l.reason}</td>
+          <td>${statusSpan}</td>
+          <td>${img}</td>
+        </tr>`;
+
+        if (l.status === "Pending") {
+          rT.innerHTML += `<tr>
+            <td>${l.student}</td>
+            <td>${l.type}</td>
+            <td>${formatDateRange(l.start, l.end)}</td>
+            <td>${l.reason}</td>
+            <td>${img}</td>
+            <td>${statusSpan}</td>
+            <td>
+              <button class="action-btn approve-btn" onclick="changeStatus(${i}, 'Approved')">
+                <i class="fas fa-check"></i> Approve
+              </button>
+              <button class="action-btn reject-btn" onclick="changeStatus(${i}, 'Rejected')">
+                <i class="fas fa-times"></i> Reject
+              </button>
+            </td>
+          </tr>`;
+        }
+      }
+    });
+
+    if (currentUser.role === 'student' && !document.querySelector('#historyTable tr:nth-child(2)')) {
+      hT.innerHTML += `<tr><td colspan="6" style="text-align: center; padding: 30px;">
+        No leave applications found. Apply for a leave to see your history.
+      </td></tr>`;
+    }
+
+    if (currentUser.role === 'faculty' && !document.querySelector('#requestsTable tr:nth-child(2)')) {
+      rT.innerHTML += `<tr><td colspan="7" style="text-align: center; padding: 30px;">
+        No pending leave requests to approve.
+      </td></tr>`;
+    }
+
+    if (currentUser.role === 'faculty' && !document.querySelector('#facultyHistoryTable tr:nth-child(2)')) {
+      fT.innerHTML += `<tr><td colspan="6" style="text-align: center; padding: 30px;">
+        No leave applications in the system.
+      </td></tr>`;
+    }
+  }
+
+  function changeStatus(index, status) {
+    leaves[index].status = status;
+    leaves[index].notified = false; // flag for notification
+    loadTables();
+    
+    // Show success message
+    alert(`Leave application ${status.toLowerCase()} successfully!`);
+  }
+
+  function loadNotifications() {
+    const box = document.getElementById("notifications");
+    const myLeaves = leaves.filter(l => l.student === currentUser.username && l.status !== "Pending" && !l.notified);
+    
+    if (myLeaves.length === 0) {
+      box.innerHTML = `<div style="text-align: center; padding: 20px;">
+        <i class="fas fa-bell-slash" style="font-size: 30px; color: #aaa; margin-bottom: 10px;"></i>
+        <p>No new notifications.</p>
+      </div>`;
+    } else {
+      let html = "";
+      myLeaves.forEach(l => {
+        const icon = l.status === "Approved" ? "check-circle" : "times-circle";
+        const color = l.status === "Approved" ? "#27ae60" : "#e74c3c";
+        
+        html += `<div class="notification-item">
+          <i class="fas fa-${icon}" style="color: ${color}; margin-right: 10px;"></i>
+          Your leave from <strong>${l.start}</strong> to <strong>${l.end}</strong> has been 
+          <strong style="color: ${color}">${l.status}</strong> by <strong>${l.faculty}</strong>.
+        </div>`;
+        
+        l.notified = true;
+      });
+      box.innerHTML = html;
+    }
+  }
+</script>
+
+</body>
+</html>
